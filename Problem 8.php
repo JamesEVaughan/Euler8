@@ -11,7 +11,6 @@
     <b>Solution: </b> <br />
 	<?php
 		// Using <br /> tags to make line breaks output properly
-	    echo "Running PHP code now, hope you have number.dat<br />";
 		
 		// number.dat should have the number save as plain text with no whitespace
 		$fTheNum = @fopen("number.dat", "rb");
@@ -22,6 +21,7 @@
 		}
 		
 		$tempArr = array();
+		$answer = 0;
 		
 		// Main loop
 		while (!feof($fTheNum)) {
@@ -35,12 +35,58 @@
 			if (!$digit) {
 				// It's a zero, pop it off and find the largest product
 				array_pop($tempArr);
-				foreach ($tempArr as $tempy) {
-					echo $tempy;
+				
+				$tempy = findGreatest5($tempArr);
+				if ($answer < $tempy) {
+					$answer = $tempy;
 				}
-				echo "<br />";
+				// Reset values and continue the search
 				$tempArr = array();
 			}
+		}
+		
+		echo "The answer we found was: ".$answer."<br />";
+		echo "I hope we got it right! ^_^<br />";
+		
+		echo "<br />Ed: We did!";
+		
+		/******************Function definitions**************************/
+		function findGreatest5($array)
+		{
+			// Finds the five consecutive elements of an array with the greatest product
+			// Returns largest the product found or a negative if there are none
+			
+			if (count($array) < 5) {
+				// This covers arrays being too small and not being arrays at all
+				return -1;
+			}
+			
+			$theKeys = array_keys($array);
+			$total = -1;	// Reigning champ total
+			$tempTotal = 1;	// Upstart total
+			$tempAns = array_shift($theKeys);	// Upstart, err, start
+			
+			$counter = 4;
+			
+			foreach ($array as $i => $elem) {
+				$tempTotal *= $elem;
+				
+				if ($counter) {
+					$counter--;
+				} else {
+					if ($total < $tempTotal) {
+						// New total has been found
+						$total = $tempTotal;
+					}
+					
+					// Divide off the previous first elem and get a new one
+					$tempTotal /= $array[$tempAns];
+					$tempAns = array_shift($theKeys);
+				}
+			}
+			
+			// Now we should have the five with the greatest product
+			return $total;
 		}
 	?>
 </body>
