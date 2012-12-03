@@ -1,0 +1,1 @@
+This is a solution to Project Euler, Problem 8, written in PHP 5.4. This is my first stab at PHP or, really, any form of scripting language.

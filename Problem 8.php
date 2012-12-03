@@ -13,7 +13,7 @@
 		// Using <br /> tags to make line breaks output properly
 	    echo "Running PHP code now, hope you have number.dat<br />";
 		
-		// The number is stored in number.dat
+		// number.dat should have the number save as plain text with no whitespace
 		$fTheNum = @fopen("number.dat", "rb");
 		// If the file isn't there, just don't bother
 		if ($fTheNum === false) {
@@ -21,13 +21,25 @@
 			return;
 		}
 		
-		$zeroCounter = 0;
+		$tempArr = array();
 		
+		// Main loop
 		while (!feof($fTheNum)) {
-			$digit = ord(fgetc($fTheNum)) - 48;
+			$digit = ord(fgetc($fTheNum)) - 48;	// Sets $digit to the actaul digit value
+			if ($digit > 9 || $digit < 0) {
+				// Then it ain't a real number
+				continue;
+			}
+			$tempArr[] = $digit;
+			
 			if (!$digit) {
-				$zeroCounter++;
-				echo "Found a zero!".$zeroCounter."<br />";
+				// It's a zero, pop it off and find the largest product
+				array_pop($tempArr);
+				foreach ($tempArr as $tempy) {
+					echo $tempy;
+				}
+				echo "<br />";
+				$tempArr = array();
 			}
 		}
 	?>
